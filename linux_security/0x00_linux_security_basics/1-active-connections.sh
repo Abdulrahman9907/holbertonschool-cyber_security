@@ -1,2 +1,2 @@
 #!/bin/bash
-ss -tlnp
+sudo ss -tlnp

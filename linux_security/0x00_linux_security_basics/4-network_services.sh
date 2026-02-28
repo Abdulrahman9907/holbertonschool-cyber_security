@@ -1,2 +1,2 @@
 #!/bin/bash
-ss -tlnp -u
+sudo netstat -tulnp
