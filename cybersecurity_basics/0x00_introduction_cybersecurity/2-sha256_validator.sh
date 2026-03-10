@@ -1,2 +1,2 @@
 #!/bin/bash
-echo "$2  $1" | sha256sum --check
+sha256sum "$1" | awk -v h="$2" -v f="$1" '{if ($1==h) print f": OK"; else print f": FAILED"}'
