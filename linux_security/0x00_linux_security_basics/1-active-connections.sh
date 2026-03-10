@@ -1,2 +1,2 @@
 #!/bin/bash
-sudo ss -tnpa
+sudo ss -antp
