@@ -1,0 +1,2 @@
+tcp.flags.fin == 1 and tcp.flags.ack == 0
+
