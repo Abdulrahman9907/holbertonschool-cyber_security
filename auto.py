@@ -80,24 +80,32 @@ async def main():
 
             # Find correction button
             try:
-                # Look for button text containing "correction" (case insensitive)
-                button = await page.query_selector("button:has-text('correction'), button:has-text('Correction'), button:has-text('CORRECTION')")
+                # Try multiple button selectors
+                button = None
+
+                # Try direct text match
+                buttons = await page.query_selector_all("button")
+                for btn in buttons:
+                    text = await btn.inner_text()
+                    if "correction" in text.lower():
+                        button = btn
+                        break
 
                 if not button:
-                    # Try another selector
-                    button = page.locator("button").filter(has_text="correction").first
-
-                if button:
-                    print("CLICKING...", end=" ")
-                    sys.stdout.flush()
-
-                    await button.scroll_into_view_if_needed()
-                    await button.click()
-                    await page.wait_for_timeout(5000)
-                else:
                     print("NO_BUTTON")
                     await page.screenshot(path=str(project_dir / f"attempt_{attempt}.png"))
+                    # Print page content for debugging
+                    content = await page.content()
+                    with open(project_dir / f"page_{attempt}.html", "w") as f:
+                        f.write(content)
                     break
+
+                print("CLICKING...", end=" ")
+                sys.stdout.flush()
+
+                # Click without scroll (simpler approach)
+                await button.click(timeout=10000)
+                await page.wait_for_timeout(5000)
 
             except Exception as e:
                 print(f"ERROR: {str(e)[:50]}")
@@ -161,10 +169,10 @@ async def main():
                 await page.wait_for_timeout(2000)
 
         print("\n[DONE] Automation complete")
-        print("[BROWSER] Keeping browser open - close manually when done")
+        print("[BROWSER] Keeping browser open for 30 seconds then closing...")
 
         # Keep browser open for review
-        await page.wait_for_timeout(300000)  # 5 minutes
+        await page.wait_for_timeout(30000)  # 30 seconds
 
         await browser.close()
 

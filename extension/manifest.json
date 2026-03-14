@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Holberton Auto Submitter",
+  "version": "1.0",
+  "description": "Automates Holberton intranet project submission and correction",
+  "permissions": ["storage", "activeTab", "scripting"],
+  "host_permissions": ["https://intranet.hbtn.io/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Holberton Auto Submitter"
+  }
+}
